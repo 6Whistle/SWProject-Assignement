@@ -1,6 +1,7 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<!-- Read page -->
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,11 +18,16 @@
 <body>
 <div class="container">
     <br>
+    <!-- Title -->
     <h2 class="text-center" th:text="${info.title}">title</h2>
     <br>
+
+    <!-- count and date -->
     <p class="text-center">조회수 : <span th:text="${info.count}">count</span></p>
     <p class="text-center">생성일자 : <span th:text="${info.date}">date</span></p>
     <br>
+
+    <!-- Text -->
     <h4 class="text-center">내용</h4>
     <table class="table table-striped text-center t">   
         <tbody>
@@ -29,11 +35,15 @@
               <td th:text="${info.text}">text</td>
           </tr>
         </tbody>
-      </table>
+    </table>
 
+    <!-- Buttons -->
     <div class="text-center">
+        <!-- Go board page -->
         <a type="button" class="btn btn-primary" th:href="@{/board}">이전</a>
+        <!-- Go id's Write page -->
         <a type="button" class="btn btn-primary" th:href="@{/board/form(id=${info.id})}">수정</a>
+        <!-- Delete id's Delete page-->
         <a type="button" class="btn btn-primary" th:href="@{/board/read/delete(id=${info.id})}">삭제</a>
     </div>
 </div>

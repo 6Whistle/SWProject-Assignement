@@ -1,6 +1,7 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<!-- Board page -->
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -19,6 +20,7 @@
         <br>
         <h2 class="text-center">게시판</h2>
         <br>
+        <!-- Board table -->
         <table class="table table-striped">
             <thead>
               <tr>
@@ -28,7 +30,9 @@
                 <th scope="col">조회수</th>
               </tr>
             </thead>
+
             <tbody>
+            <!-- for info : list, repeat -->
               <tr th:each="info : ${list}">
                   <td th:text="${info.id}">num</td>
                   <td><a style="color:black" th:text="${info.title}" th:href="@{/board/read(id=${info.id})}">title</a></td>
@@ -36,16 +40,22 @@
                   <td th:text="${info.count}">count</td>
               </tr>
             </tbody>
-          </table>
-          <nav aria-label="Page navigation">
+        </table>
+
+        <!-- Page button -->
+        <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
+                <!-- for i=1; i<endpage; i++ -->
                 <li class="page-item" th:each="i: ${#numbers.sequence(1, endpage)}">
-                    <a class="page-link" th:style="${i - 1 == curpage} ? 'color:red'" th:href="@{/board/(page=${i - 1})}" th:text="${i}">pagenum
-                    </a>
+                    <!-- Each href URL(page=${i - 1}) and text(${i}) is affected by i -->
+                    <!-- if page is current page(i-1 == curpage), text color is red -->
+                    <a class="page-link" th:style="${i - 1 == curpage} ? 'color:red'" th:href="@{/board/(page=${i - 1})}" th:text="${i}">pagenum</a>
                 </li>
             </ul>
         </nav>
-          <div class="text-center">
+
+        <!-- write butten -->
+        <div class="text-center">
             <a type="button" class="btn btn-primary" th:href="@{/board/form}">게시글 작성</a>
         </div>
     </div>
