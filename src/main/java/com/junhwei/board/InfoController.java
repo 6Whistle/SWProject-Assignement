@@ -2,7 +2,9 @@ package com.junhwei.board;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +28,21 @@ public class InfoController {
     }
 
     @GetMapping("/board")
-    public String list(Model model){
-        List<Info> infomations = repository.findAll();
-        model.addAttribute("list", infomations);
+    public String list(Model model, @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<Info> page = repository.findAll(pageable);
+        model.addAttribute("endpage", page.getTotalPages() - 1);
+        model.addAttribute("curpage", pageable.getPageNumber());
+        model.addAttribute("list", page);
         return "board";
+    }
+
+    @GetMapping("/board/read")
+    public String read(Model model, @RequestParam Long id){
+        Info info = repository.findById(id).orElse(null);
+        info.setCount(info.getCount() + 1);
+        repository.save(info);
+        model.addAttribute("info", info);
+        return "read";
     }
 
     @GetMapping("/board/form")
@@ -56,14 +69,9 @@ public class InfoController {
         return "redirect:/board";
     }
 
-    @GetMapping("/boardList/{currentPage}")
-    public String boardList(Model model, @RequestParam(name = "currentPage", defaultValue = "0") int currentPage) {
-        int pageSize = 8;
-        PageRequest pageRequest= PageRequest.of(currentPage, pageSize, Sort.by("id").descending());
-        Page<Info> page = repository.findAll(pageRequest);
-
-        model.addAttribute("list", page);
-        return "test";
+    @GetMapping("/board/read/delete")
+    String deleteInfo(@RequestParam(required = false) Long id){
+        repository.deleteById(id);
+        return "redirect:/board";
     }
-
 }
